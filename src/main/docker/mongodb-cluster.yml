@@ -1,0 +1,16 @@
+version: '2'
+services:
+    skilltracker-mongodb:
+        image: mongo:3.4.10
+        ports:
+            - "27017:27017"
+        command: mongos --configdb skilltracker-mongodb-config
+    skilltracker-mongodb-node:
+        build:
+            context: .
+            dockerfile: mongodb/MongoDB.Dockerfile
+        command: mongod --replSet rs1 --noprealloc --smallfiles
+    skilltracker-mongodb-config:
+        image: mongo:3.4.10
+        container_name: skilltracker-mongodb-config
+        command: mongod --noprealloc --smallfiles --configsvr --dbpath /data/db
